@@ -1,0 +1,200 @@
+language {
+ name = "Svenska",
+ description = "SAOL13"
+}
+
+blank {
+ score = 0,
+ count = 2 
+}
+
+tile {
+ char = "a",
+ score = 1,
+ count = 8
+}
+
+tile {
+ char = "b",
+ score = 4,
+ count = 2
+}
+
+tile {
+ char = "c",
+ score = 8,
+ count = 1
+}
+
+tile {
+ char = "d",
+ score = 1,
+ count = 5
+}
+
+tile {
+ char = "e",
+ score = 1,
+ count = 7
+}
+
+tile {
+ char = "f",
+ score = 3,
+ count = 2
+}
+
+tile {
+ char = "g",
+ score = 2,
+ count = 3
+}
+
+tile {
+ char = "h",
+ score = 2,
+ count = 2
+}
+
+tile {
+ char = "i",
+ score = 1,
+ count = 5
+}
+
+tile {
+ char = "j",
+ score = 7,
+ count = 1
+}
+
+tile {
+ char = "k",
+ score = 2,
+ count = 3
+}
+
+tile {
+ char = "l",
+ score = 1,
+ count = 5
+}
+
+tile {
+ char = "m",
+ score = 2,
+ count = 3
+}
+
+tile {
+ char = "n",
+ score = 1,
+ count = 5
+}
+
+tile {
+ char = "o",
+ score = 2,
+ count = 5
+}
+
+tile {
+ char = "p",
+ score = 4,
+ count = 2
+}
+
+tile {
+ char = "q",
+ score = 0,
+ count = 0
+}
+
+tile {
+ char = "r",
+ score = 1,
+ count = 8
+}
+
+tile {
+ char = "s",
+ score = 1,
+ count = 8
+}
+
+tile {
+ char = "t",
+ score = 1,
+ count = 8
+}
+
+tile {
+ char = "u",
+ score = 4,
+ count = 3
+}
+
+tile {
+ char = "v",
+ score = 3,
+ count = 2
+}
+
+tile {
+ char = "w",
+ score = 0,
+ count = 0
+}
+
+tile {
+ char = "x",
+ score = 8,
+ count = 1
+}
+
+tile {
+ char = "y",
+ score = 7,
+ count = 1
+}
+
+tile {
+ char = "z",
+ score = 10,
+ count = 1
+}
+
+tile {
+ char = "å",
+ score = 4,
+ count = 2
+}
+
+tile {
+ char = "ä",
+ score = 3,
+ count = 2
+}
+
+tile {
+ char = "ö",
+ score = 4,
+ count = 2
+}
+
+tile {
+ char = "ü",
+ score = 0,
+ count = 0
+}
+
+tile {
+ char = "æ",
+ score = 0,
+ count = 0
+}
+
+dictionary {
+ enc = "ISO-8859-1",
+ file = "lang/dic/svenska.txt"
+}
