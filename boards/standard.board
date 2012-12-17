@@ -1,0 +1,374 @@
+board {
+ width = 15,
+ height = 15
+}
+
+square {
+ x = 0,
+ y = 0,
+ wordbonus=3
+}
+
+square {
+ x = 3,
+ y = 0,
+ tilebonus=2
+}
+
+square {
+ x = 7,
+ y = 0,
+ wordbonus=3
+}
+
+square {
+ x = 11,
+ y = 0,
+ tilebonus=2
+}
+
+
+square {
+ x = 14,
+ y = 0,
+ wordbonus=3
+}
+
+square {
+ x = 1,
+ y = 1,
+ wordbonus=2
+}
+
+square {
+ x = 5,
+ y = 1,
+ tilebonus=3
+}
+
+square {
+ x = 9,
+ y = 1,
+ tilebonus=3
+}
+
+square {
+ x = 13,
+ y = 1,
+ wordbonus=2
+}
+
+square {
+ x = 2,
+ y = 2,
+ wordbonus=2
+}
+
+square {
+ x = 6,
+ y = 2,
+ tilebonus=2
+}
+
+square {
+ x = 8,
+ y = 2,
+ tilebonus=2
+}
+
+square {
+ x = 12,
+ y = 2,
+ wordbonus=2
+}
+
+square {
+ x = 0,
+ y = 3,
+ tilebonus=2
+}
+
+square {
+ x = 3,
+ y = 3,
+ wordbonus=2
+}
+
+square {
+ x = 7,
+ y = 3,
+ tilebonus=2
+}
+
+square {
+ x = 11,
+ y = 3,
+ wordbonus=2
+}
+
+square {
+ x = 14,
+ y = 3,
+ tilebonus=2
+}
+
+square {
+ x = 4,
+ y = 4,
+ wordbonus=2
+}
+
+square {
+ x = 10,
+ y = 4,
+ wordbonus=2
+}
+
+square {
+ x = 1,
+ y = 5,
+ tilebonus=3
+}
+
+square {
+ x = 5,
+ y = 5,
+ tilebonus=3
+}
+
+square {
+ x = 9,
+ y = 5,
+ tilebonus=3
+}
+
+square {
+ x = 13,
+ y = 5,
+ tilebonus=3
+}
+
+square {
+ x = 1,
+ y = 9,
+ tilebonus=3
+}
+
+square {
+ x = 5,
+ y = 9,
+ tilebonus=3
+}
+
+square {
+ x = 2,
+ y = 6,
+ tilebonus=2
+}
+
+square {
+ x = 6,
+ y = 6,
+ tilebonus=2
+}
+
+square {
+ x = 8,
+ y = 6,
+ tilebonus=2
+}
+
+square {
+ x = 0,
+ y = 7,
+ wordbonus=3
+}
+
+square {
+ x = 3,
+ y = 7,
+ tilebonus=2
+}
+
+square {
+ x = 7,
+ y = 7,
+ wordbonus=2,
+ start="true"
+}
+
+square {
+ x = 11,
+ y = 7,
+ tilebonus=2
+}
+
+square {
+ x = 14,
+ y = 7,
+ wordbonus=3
+}
+
+square {
+ x = 12,
+ y = 6,
+ tilebonus=2
+}
+
+square {
+ x = 2,
+ y = 8,
+ tilebonus=2
+}
+
+square {
+ x = 6,
+ y = 8,
+ tilebonus=2
+}
+
+square {
+ x = 8,
+ y = 8,
+ tilebonus=2
+}
+
+square {
+ x = 12,
+ y = 8,
+ tilebonus=2
+}
+
+
+square {
+ x = 9,
+ y = 9,
+ tilebonus=3
+}
+
+square {
+ x = 13,
+ y = 9,
+ tilebonus=3
+}
+
+square {
+ x = 4,
+ y = 10,
+ wordbonus=2
+}
+
+square {
+ x = 10,
+ y = 10,
+ wordbonus=2
+}
+
+square {
+ x = 0,
+ y = 11,
+ tilebonus=2
+}
+
+square {
+ x = 3,
+ y = 11,
+ wordbonus=2
+}
+
+square {
+ x = 7,
+ y = 11,
+ tilebonus=2
+}
+
+square {
+ x = 11,
+ y = 11,
+ wordbonus=2
+}
+
+square {
+ x = 14,
+ y = 11,
+ tilebonus=2
+}
+
+square {
+ x = 2,
+ y = 12,
+ wordbonus=2
+}
+
+square {
+ x = 6,
+ y = 12,
+ tilebonus=2
+}
+
+square {
+ x = 8,
+ y = 12,
+ tilebonus=2
+}
+
+square {
+ x = 12,
+ y = 12,
+ wordbonus=2
+}
+
+square {
+ x = 1,
+ y = 13,
+ wordbonus=2
+}
+
+square {
+ x = 5,
+ y = 13,
+ tilebonus=3
+}
+
+square {
+ x = 9,
+ y = 13,
+ tilebonus=3
+}
+
+square {
+ x = 13,
+ y = 13,
+ wordbonus=2
+}
+
+square {
+ x = 0,
+ y = 14,
+ wordbonus=3
+}
+
+square {
+ x = 3,
+ y = 14,
+ tilebonus=2
+}
+
+square {
+ x = 7,
+ y = 14,
+ wordbonus=3
+}
+
+square {
+ x = 11,
+ y = 14,
+ tilebonus=2
+}
+
+
+square {
+ x = 14,
+ y = 14,
+ wordbonus=3
+}

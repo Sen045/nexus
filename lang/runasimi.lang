@@ -1,0 +1,148 @@
+language {
+ name = "Runasimi",
+ description = "With CH-tile."
+}
+
+blank {
+ score = 0,
+ count = 2 
+}
+
+tile {
+ char = "a",
+ score = 1,
+ count = 19
+}
+
+tile {
+ char = "b",
+ score = 9,
+ count = 1
+}
+
+tile {
+ char = "c",
+ score = 2,
+ count = 4,
+ external = "ch"
+}
+
+tile {
+ char = "d",
+ score = 8,
+ count = 1
+}
+
+tile {
+ char = "f",
+ score = 0,
+ count = 0
+}
+
+tile {
+ char = "g",
+ score = 10,
+ count = 1
+}
+
+tile {
+ char = "h",
+ score = 1,
+ count = 6
+}
+
+tile {
+ char = "i",
+ score = 1,
+ count = 9
+}
+
+tile {
+ char = "k",
+ score = 1,
+ count = 6
+}
+
+tile {
+ char = "l",
+ score = 1,
+ count = 5
+}
+
+tile {
+ char = "m",
+ score = 3,
+ count = 3
+}
+
+tile {
+ char = "n",
+ score = 2,
+ count = 4
+}
+
+tile {
+ char = "o",
+ score = 0,
+ count = 0
+}
+
+tile {
+ char = "p",
+ score = 2,
+ count = 3
+}
+
+tile {
+ char = "q",
+ score = 2,
+ count = 4
+}
+
+tile {
+ char = "r",
+ score = 2,
+ count = 3
+}
+
+tile {
+ char = "s",
+ score = 2,
+ count = 4
+}
+
+tile {
+ char = "t",
+ score = 2,
+ count = 3
+}
+
+tile {
+ char = "u",
+ score = 1,
+ count = 10
+}
+
+tile {
+ char = "w",
+ score = 4,
+ count = 2
+}
+
+tile {
+ char = "y",
+ score = 1,
+ count = 9
+}
+
+tile {
+ char = "ñ",
+ score = 7,
+ count = 1
+}
+
+
+dictionary {
+ enc = "ISO-8859-1",
+ file = "lang/dic/runasimi.txt"
+}

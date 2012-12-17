@@ -1,0 +1,10 @@
+all:
+	scalac -classpath /usr/share/java/scala-swing.jar src/subdic.scala src/trie.scala src/dictionary.scala src/predicate.scala src/predicateparser.scala src/regexp.scala src/regexpparser.scala src/automaton.scala src/drawtile.scala src/multiset.scala src/language.scala src/languageparser.scala src/tile.scala src/board.scala src/square.scala src/move.scala src/semimove.scala src/boardgui.scala src/boardparser.scala src/game.scala src/languagebank.scala src/settings.scala
+	scaladoc -classpath /usr/share/java/scala-swing.jar -d doc/ src/subdic.scala src/trie.scala src/dictionary.scala src/predicate.scala src/predicateparser.scala src/regexp.scala src/regexpparser.scala src/automaton.scala src/drawtile.scala src/multiset.scala src/language.scala src/languageparser.scala src/tile.scala src/board.scala src/square.scala src/move.scala src/semimove.scala src/boardgui.scala src/boardparser.scala src/game.scala src/languagebank.scala src/settings.scala
+nexus:
+	scalac -classpath /usr/share/java/scala-swing.jar src/subdic.scala src/trie.scala src/dictionary.scala src/predicate.scala src/predicateparser.scala src/regexp.scala src/regexpparser.scala src/automaton.scala src/drawtile.scala src/multiset.scala src/language.scala src/languageparser.scala src/tile.scala src/board.scala src/square.scala src/move.scala src/semimove.scala src/boardgui.scala src/boardparser.scala src/game.scala src/languagebank.scala src/settings.scala
+documentation:
+	scaladoc -classpath /usr/share/java/scala-swing.jar -d doc/ src/subdic.scala src/trie.scala src/dictionary.scala src/predicate.scala src/predicateparser.scala src/regexp.scala src/regexpparser.scala src/automaton.scala src/drawtile.scala src/multiset.scala src/language.scala src/languageparser.scala src/tile.scala src/board.scala src/square.scala src/move.scala src/semimove.scala src/boardgui.scala src/boardparser.scala src/game.scala src/languagebank.scala src/settings.scala
+clean:
+	rm -r doc/*
+	rm *.class
