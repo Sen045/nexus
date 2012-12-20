@@ -15,15 +15,109 @@
 package nexus
 
 class Game(b:Board, l:String, d:Multiset[DrawTile], p : List[(List[DrawTile],Int)], pass:Int, o:Boolean, rs:Int, c:Int) {
-  val board = b
-  val bag = d
+  def board = b
+  def bag = d
   val racks = p map (_._1)
-  val scores = p map (_._1)
+  val scores = p map (_._2)
   val players = p length
-  val over = o
-  val racksize = rs
+  def over = o
+  def racksize = rs
   def language = LanguageBank get l
-  val current = c
+  def currentPlayer = c
+  def passes = pass
+
+  def nextPlayer : Int =
+    (currentPlayer + 1) % players
+
+  def finalise : Game = {
+    if(over)
+      this
+    else if(passes >= 6)
+      new Game(board,l,bag,p map {case (l,i) => (l,i - l.foldLeft(0)(_ + language.tilevalue(_)))},passes,true,racksize,nextPlayer)
+    else /* todo: om spelet slutar inte genom passar */
+      this
+  }
+
+  def validateMove(m:SemiMove) : Boolean = {
+    if(over)
+      false
+    else {
+      m match {
+	case SPass => true
+	case SSwap(tiles) => {
+	  (bag.size >= racksize) &&
+	  (Multiset.fromTraversable(racks(currentPlayer)) supersetOf tiles)
+	}
+	case SPlay(horizontal,coordinate,tiles) => {
+	  (SPlay(horizontal,coordinate,tiles) valid board) &&
+	  (Multiset.fromTraversable(racks(currentPlayer)) supersetOf (tiles map (_.toDrawTile)))
+	}
+      }    
+    }
+  }
+
+  def validateMove(m:Move) : Boolean = {
+    if(over)
+      false
+    else {
+      m move match {
+	case SPass => {
+	  (Multiset.fromTraversable(m leave) ==
+	    Multiset.fromTraversable(racks(currentPlayer))) &&
+	  m.draw.isEmpty
+	}
+	case SSwap(tiles) => {
+	  (Multiset.fromTraversable(m.leave ++ tiles) ==
+	    Multiset.fromTraversable(racks(currentPlayer))) &&
+	  (bag -- m.draw).isDefined &&
+	  (m.draw.size == tiles.size)
+	  bag.size >= racksize
+	}
+	case SPlay(horizontal,coordinate,tiles) => {
+	  (SPlay(horizontal,coordinate,tiles) valid board) &&
+	  (Multiset.fromTraversable(m.leave ++ (tiles.map(_ toDrawTile))) ==
+	    Multiset.fromTraversable(racks(currentPlayer))) &&
+	  (m.draw.size == (tiles.size min bag.size))
+	}
+      }    
+    }
+  }
+
+  def applyMove(m:Move) : Option[Game] = {
+    if(validateMove(m))
+      Some((m move match {
+	case SPass => new Game(board,l,bag,p,passes+1,over,racksize,nextPlayer)
+	case SSwap(tiles) => {
+	  new Game(board,
+		   l,
+		   (bag -- m.draw).get ++ tiles,
+		   p updated (currentPlayer,(m.leave ++ m.draw,scores(currentPlayer))),
+		   passes+1,
+		   over,
+		   racksize,
+		   nextPlayer)
+	}
+	case SPlay(horizontal,coordinate,tiles) => {
+	  new Game(board applyMove m.move,
+		   l,
+		   (bag -- m.draw) get,
+		   p updated (currentPlayer,(m.leave ++ m.draw, scores(currentPlayer))), /*todo: scoring! */
+		   0,
+		   over,
+		   racksize,
+		   nextPlayer)
+	}
+      }) finalise)
+    else
+      None
+  }
+
+  def applyMove(m:SemiMove) : Option[Game] = {
+    if(validateMove(m))
+      applyMove(m toMove this)
+    else
+      None
+  }
 }
 
 object Game {
@@ -36,7 +130,5 @@ object Game {
     }
     new Game(b,lang,bag,pl,0,false,rs,0)
   }
-/*  def trivial =
-    newGame(new Board(0,0),"",0,0)*/
 }
 

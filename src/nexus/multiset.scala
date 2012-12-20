@@ -80,9 +80,9 @@ case class Multiset[A] private (b : Map[A,Int]) {
 
   /** Removes the elements of a traversable collection to this multiset.
    *  @param t collection to remove.
-   *  @return the multiset with the elements of t removed if they exists, None otherwise.
+   *  @return the multiset with the elements of t removed if they exist, None otherwise.
    */
-  def --(t:Traversable[A]) = {
+  def --(t:Traversable[A]) : Option[Multiset[A]] = {
     t.foldLeft(Some(this):Option[Multiset[A]]){case (b, t) => b flatMap (_ - t)}
   }
 
@@ -137,6 +137,30 @@ case class Multiset[A] private (b : Map[A,Int]) {
       }
     else
       (Nil,this)
+  }
+
+  /** All elements of the multiset in a list.
+   *  @return list of all elements in this.
+   */
+  def toList : List[A] =
+    b.keys.foldLeft(Nil:List[A]){case (l,k) => List.fill(b apply k)(k) ++ l}
+
+  /** Determine whether this multiset is a superset of t.
+   *  @param t a traversable collection
+   *  @return true iff this multiset is a superset of t.
+   */
+  def supersetOf(t:Traversable[A]) : Boolean = {
+    if(t.isEmpty)
+      true
+    else
+      get(t head) match {
+	case None => false
+	case Some(n) =>
+	  if(n>0)
+	    (this - t.head).get supersetOf t.tail
+	  else
+	    false
+      }
   }
 }
 

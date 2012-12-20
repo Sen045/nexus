@@ -32,24 +32,41 @@ object Post {
 	""
       else if(n==1) {
 	m get (s take 1) match {
-	  case None => (s take 1) + internaliserAux(maxlength)(s drop n)
+	  case None =>
+	    m get (s take 1).toLowerCase match {
+	      case None => (s take 1) + internaliserAux(maxlength)(s drop n)
+	      case Some(c) => c.toUpper + internaliserAux(maxlength)(s drop n)
+	    }
+
 	  case Some(c) => c + internaliserAux(maxlength)(s drop n)
 	}
       }
       else {
 	m get (s take n) match {
-	  case None => internaliserAux(n-1)(s:String)
+	  case None =>
+	    m get (s take n).toLowerCase match {
+	      case None => internaliserAux(n-1)(s:String)
+	      case Some(c) => c.toUpper + internaliserAux(maxlength)(s drop n)
+	    }
 	  case Some(c) => c + internaliserAux(maxlength)(s drop n)
 	}
       }
     }
     internaliserAux(maxlength)(s)
   }
-/* TODO: massor med kodduplicering här */
-  def makeLanguageModuloDictionary(p:List[Post]) : Language = {
+  private def genMakeLanguage(p:List[Post],withDictionary:Boolean = true) : Language = {
     val PBlank(s,c) = (p filter {case PBlank(_,_) => true case _ => false}) head
     val PLanguage(lname,ldesc) = (p filter {case PLanguage(_,_) => true case _ => false}) head
-    val dic = Dictionary.empty()
+    val dic = (
+      if(withDictionary) {
+	val PDictionary(denc,dfile) = (p filter {case PDictionary(_,_) => true case _ => false}) head
+	var dics = io.Source.fromFile(dfile,denc)
+	val dic = Dictionary.empty() +++ dics.getLines
+	dics.close()
+	dic
+      }
+      else
+	Dictionary.empty)
     val tiles = p filter {case PTile(_,_,_,_) => true case _ => false}
     val tilebag = tiles.foldLeft(Multiset.empty[DrawTile] +++ (DrawBlank,c)){case (m,PBlank(_,c)) => m +++ (DrawBlank,c)
 										   case (m,PTile(t,_,c,_)) => m +++ (DrawLetter(t),c)
@@ -66,28 +83,11 @@ object Post {
     }
   }
 
-  def makeLanguage(p:List[Post]) : Language = {
-    val PBlank(s,c) = (p filter {case PBlank(_,_) => true case _ => false}) head
-    val PLanguage(lname,ldesc) = (p filter {case PLanguage(_,_) => true case _ => false}) head
-    val PDictionary(denc,dfile) = (p filter {case PDictionary(_,_) => true case _ => false}) head
-    val tiles = p filter {case PTile(_,_,_,_) => true case _ => false}
-    var dics = io.Source.fromFile(dfile,denc)
-    val dic = Dictionary.empty() +++ dics.getLines
-    dics.close()
-    val tilebag = tiles.foldLeft(Multiset.empty[DrawTile] +++ (DrawBlank,c)){case (m,PBlank(_,c)) => m +++ (DrawBlank,c)
-										   case (m,PTile(t,_,c,_)) => m +++ (DrawLetter(t),c)
-										   case (m,_) => m}
-    val scores = (PBlank(s,c)::tiles).foldLeft(Map.empty[DrawTile,Int]){case (map,PBlank(s,_)) => map + (DrawBlank -> s)
-										  case (map,PTile(t,s,_,_)) => map + (DrawLetter(t) -> s)
-										  case (map,_) => map}
-    val (externaliserTable,internaliserTable) = tiles.foldLeft((Map.empty[Char,String],Map.empty[String,Char])){case ((map1,map2),PTile(c,_,_,s)) => (map1 + (c -> s),map2 + (s -> c)) case (t,_) => t}
+  def makeLanguageModuloDictionary(p:List[Post]) : Language =
+    genMakeLanguage(p,false)
 
-    if(externaliserTable forall {case (c,s) => (c toString) == s})
-      Language.make(dic,tilebag,scores,lname,ldesc)
-    else {
-      Language.make(dic,tilebag,scores,lname,ldesc,internaliser(internaliserTable,internaliserTable.keys.foldLeft(1){case (n,s) => n max (s length)}),externaliser(externaliserTable))
-    }
-  }
+  def makeLanguage(p:List[Post]) : Language =
+    genMakeLanguage(p)
 }
 
 class LanguageParser extends RegexParsers {
@@ -127,20 +127,19 @@ class LanguageParser extends RegexParsers {
 }
 
 object LanguageParser {
-  /* TODO: kodduplicering, kanske decoupla språkparsing från ordlisteinläsning? */
-  def parse(path : String) : Language = {
+  def genParse(path: String, languageMaker : List[Post] => Language) = {
     val Lang = new LanguageParser()
     val y = io.Source.fromFile(path) mkString;
     Lang.parseAll(Lang.postsParser,y) match {
-      case Lang.Success(p,_) => Post.makeLanguage(p)
+      case Lang.Success(p,_) => languageMaker(p)
     }
   }
 
+  def parse(path : String) : Language = {
+    genParse(path,Post.makeLanguage)
+  }
+
   def parseModuloDictionary(path : String) : Language = {
-    val Lang = new LanguageParser()
-    val y = io.Source.fromFile(path) mkString;
-    Lang.parseAll(Lang.postsParser,y) match {
-      case Lang.Success(p,_) => Post.makeLanguageModuloDictionary(p)
-    }
+    genParse(path,Post.makeLanguageModuloDictionary)
   }
 }

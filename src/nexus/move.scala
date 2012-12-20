@@ -1,5 +1,4 @@
-/** This file is part of Nexus, which is Copyright 2012 Johannes Åman Pohjola.
- *
+/** This file is part of Nexus, which is Copyright 2012 Johannes Åman Pohjola
  *  Nexus is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation, version 3.
@@ -14,4 +13,6 @@
  */
 package nexus
 
-abstract class move
+case class Move(move:SemiMove,leave:List[DrawTile],draw:List[DrawTile]) {
+
+}

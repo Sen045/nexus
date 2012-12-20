@@ -29,14 +29,27 @@ sealed abstract class SemiMove {
    *  @return true iff this move is played on a start square.
    */
   def onStart(b:Board) : Boolean =  (this touches b) exists {_.start}
+
+  /** This move including a randomly selected tile draw which may result from it.
+   *  @param b board on which the move is played.
+   *  @return the move.
+   */
+  def toMove(g:Game) : Move
 }
 
 case object SPass extends SemiMove {
   override def touches(b:Board) : List[Square] = Nil
+  override def toMove(g:Game) : Move =
+    Move(SPass,g.racks(g.currentPlayer),Nil)
 }
 
 case class SSwap(tiles: List[DrawTile]) extends SemiMove {
   override def touches(b:Board) : List[Square] = Nil
+  override def toMove(g:Game) : Move =
+    Move(this,
+	 (Multiset.fromTraversable(g.racks(g.currentPlayer)) -- tiles).get.toList,
+	 g.bag.random(tiles length)._1
+	 )
 }
 
 case class SPlay(horizontal : Boolean, coordinate : (Int,Int), tiles : List[Tile])  extends SemiMove {
@@ -48,6 +61,33 @@ case class SPlay(horizontal : Boolean, coordinate : (Int,Int), tiles : List[Tile
 	b.verticalLine(coordinate._1).drop(coordinate._2)}
     line.filter{_._2.isEmpty}.take(tiles length).map{_._1}
   }
+
+  def touchesCoords(b:Board) : List[(Int,Int)] = {    
+    (tiles,b square coordinate, b tile coordinate) match {
+      case (Nil,_,_) => Nil
+      case (_,None,_) => Nil
+      case (_::r,Some(_),None) =>
+	coordinate :: (SPlay(horizontal,
+			     if(horizontal)
+			       (coordinate._1 +1,coordinate._2)
+			     else
+			       (coordinate._1, coordinate._2 + 1),
+			     r) touchesCoords b)
+      case (l,_,Some(_)) =>
+	SPlay(horizontal,
+	      if(horizontal)
+		(coordinate._1 +1,coordinate._2)
+	      else
+		(coordinate._1, coordinate._2 + 1),
+	      l) touchesCoords b
+    }
+  }
+
+  override def toMove(g:Game) : Move =
+    Move(this,
+	 (Multiset.fromTraversable(g.racks(g.currentPlayer)) -- (tiles map (_ toDrawTile))).get.toList,
+	 g.bag.random(tiles length)._1
+	 )
 
   private def hull(b:Board) = {
     if(horizontal) {

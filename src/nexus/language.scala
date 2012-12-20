@@ -18,6 +18,7 @@ class Language private (d:Dictionary, t:Multiset[DrawTile], v:Map[DrawTile,Int],
   val dic = d
   val tileset = t
   val tilevalue = v
+  def tilevalue(d: Tile) : Int = v apply (d toDrawTile)
   val lettercount = c
   val name = n
   val description = de

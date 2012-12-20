@@ -16,17 +16,27 @@ package nexus
 
 sealed abstract class Tile {
   def letter : Char
+  def toDrawTile: DrawTile
 
   def mkString : Char
 }
 
 case class Letter(c:Char) extends Tile {
-  override def letter = this.c
-
-  override def mkString = this.c.toUpper
+  override def letter = c
+  override def mkString = c.toUpper
+  override def toDrawTile = DrawLetter(c)
 }
 case class Blank(c:Char) extends Tile {
-  override def letter = this.c
+  override def letter = c
+  override def mkString = c.toLower
+  override def toDrawTile = DrawBlank
+}
 
-  override def mkString = this.c.toLower
+object Tile {
+  def fromChar(c:Char) = {
+    if(c isLower)
+      Blank(c)
+    else
+      Letter(c toLower)
+  }
 }
