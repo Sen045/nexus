@@ -1,6 +1,6 @@
 language {
  name = "Runasimi",
- description = "With CH-tile."
+ description = "Combines conservative features of Cusco and Ayacucho Quechua and the present official writing standard of Qusqu-Qullaw in Peru. Written with a, i and u. See www.runasimi.de for more details."
 }
 
 blank {
