@@ -17,8 +17,7 @@ package nexus
 import scala.util.Random
 
 /** A multiset is a partial function from its element type to the natural numbers.
- *  Intuitively, this represents a count of the number of copies of each element that are
- *  in the multiset.
+ *  Intuitively, it keeps count of how many copies of each element it has.
  *
  *  Multiset(m) contains n copies of a if m(a) = Some(n).
  *  If m(a) = None, a is outside the domain of the multiset.
@@ -45,7 +44,7 @@ case class Multiset[A] private (b : Map[A,Int]) {
   /** Adds n elements to the multiset.
    *  @param t element to be added.
    *  @param n number of elements to add.
-   *  @return the multiset with one more copy of t.
+   *  @return the multiset with n more copies of t.
    */
   def +++(t:A, n:Int) : Multiset[A] = {
     if(n>=0)

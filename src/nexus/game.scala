@@ -101,7 +101,9 @@ class Game(b:Board, l:String, d:Multiset[DrawTile], p : List[(List[DrawTile],Int
 	  new Game(board applyMove m.move,
 		   l,
 		   (bag -- m.draw) get,
-		   p updated (currentPlayer,(m.leave ++ m.draw, scores(currentPlayer))), /*todo: scoring! */
+		   p updated (currentPlayer,
+			      (m.leave ++ m.draw,
+			       scores(currentPlayer) + (m.move score (board,language,racksize)))),
 		   0,
 		   over,
 		   racksize,

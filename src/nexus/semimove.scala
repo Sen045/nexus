@@ -35,6 +35,8 @@ sealed abstract class SemiMove {
    *  @return the move.
    */
   def toMove(g:Game) : Move
+
+  def score(b:Board,l:Language,rs:Int) : Int = 0
 }
 
 case object SPass extends SemiMove {
@@ -60,6 +62,40 @@ case class SPlay(horizontal : Boolean, coordinate : (Int,Int), tiles : List[Tile
       else
 	b.verticalLine(coordinate._1).drop(coordinate._2)}
     line.filter{_._2.isEmpty}.take(tiles length).map{_._1}
+  }
+
+  private def touchesTilesAux(b:Board) : List[Tile] = {    
+    b tile coordinate match {
+      case None =>
+	if(tiles isEmpty)
+	  Nil
+	else
+	  SPlay(horizontal,
+		if(horizontal)
+		  (coordinate._1 + 1, coordinate._2)
+		else
+		  (coordinate._1, coordinate._2 + 1),
+		tiles tail) touchesTilesAux b
+      case Some(t) =>
+	t::(SPlay(horizontal,
+		  if(horizontal)
+		    (coordinate._1 + 1, coordinate._2)
+		  else
+		    (coordinate._1, coordinate._2 + 1),
+		  tiles) touchesTilesAux b)
+    }
+  }
+
+  def touchesTiles(b:Board) : List[Tile] = {
+    val previousCoord = {
+      if(horizontal)
+	(coordinate._1 - 1, coordinate._2)
+      else
+	(coordinate._1, coordinate._2 -1)}
+    if((b tile previousCoord) isDefined)
+      SPlay(horizontal,previousCoord, tiles) touchesTiles b
+    else
+      this touchesTilesAux b
   }
 
   def touchesCoords(b:Board) : List[(Int,Int)] = {    
@@ -91,12 +127,14 @@ case class SPlay(horizontal : Boolean, coordinate : (Int,Int), tiles : List[Tile
 
   private def hull(b:Board) = {
     if(horizontal) {
-      b.horizontalLine(coordinate._2).drop(coordinate._1 - 1).take((tiles length) + 2) ++
+      b.horizontalLine(coordinate._2).drop(coordinate._1 - 1).take((tiles length) +
+								   (2 min (coordinate._1 +1))) ++
       b.horizontalLine(coordinate._2 + 1).drop(coordinate._1).take(tiles length) ++
       b.horizontalLine(coordinate._2 - 1).drop(coordinate._1).take(tiles length)
     }
     else {
-      b.verticalLine(coordinate._1).drop(coordinate._2 - 1).take((tiles length) + 2) ++
+      b.verticalLine(coordinate._1).drop(coordinate._2 - 1).take((tiles length) +
+								 (2 min (coordinate._2 + 1))) ++
       b.verticalLine(coordinate._1 + 1).drop(coordinate._2).take(tiles length) ++
       b.verticalLine(coordinate._1 - 1).drop(coordinate._2).take(tiles length)
     }
@@ -115,6 +153,31 @@ case class SPlay(horizontal : Boolean, coordinate : (Int,Int), tiles : List[Tile
       (touches(b).length == tiles.length) && b.tile(coordinate).isEmpty
     else
       onStart(b) && (tiles.length > 1) && (touches(b).length == tiles.length) && b.tile(coordinate).isEmpty
+  }
+
+  override def score(b:Board,l:Language,rs:Int) : Int = {
+    val hookscores = (tiles zip (this touchesCoords b)).foldRight(0){
+      case ((t,c),n) =>
+	SPlay(!horizontal,c,t::Nil) touchesTiles b match {
+	  case Nil => n
+	  case tiles2 => {
+	    val oldtilescore =  tiles2.foldRight(0){case (t,n) => n + (l.tilevalue(t))}
+	    val newtilescore = b.square(c).get.tilebonus * l.tilevalue(t)
+	    val multiplier = b.square(c).get.wordbonus
+	    n + ((oldtilescore+newtilescore)*multiplier)
+	  }
+	}
+    }
+    val ttiles = touchesTiles(b)
+    if((tiles.length > 1) || !(touchesTiles(b).isEmpty)) {
+      val tsquares = touches(b)
+      val newtilescore = (tiles zip tsquares).foldRight(0){case ((t,s),n) => n + (s.tilebonus * l.tilevalue(t))}
+      val oldtilescore =  ttiles.foldRight(0){case (t,n) => n + (l tilevalue t)}
+      val multiplier = tsquares.foldRight(1){case (s,n) => n * s.wordbonus}
+      val bingo = if(tiles.size == rs) 50 else 0
+      ((newtilescore+oldtilescore)*multiplier) + bingo + hookscores
+    } else
+      hookscores
   }
 }
 
